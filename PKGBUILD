@@ -1,25 +1,23 @@
 # Maintainer: Michal S <michal[at]tar[dot]black>
-# Developer:  Michal S <michal[at]tar[dot]black>
 
 pkgname=pkg-warner
 pkgver=0.1.3
-pkgrel=1
+pkgrel=2
 pkgdesc="Simple package manager warner tool for distribution developers"
 arch=('x86_64')
-url="https://github.com/crystal-linux/pkg-warner"
+url="https://github.com/crystal-linux/${pkgname}"
 license=('GPL3')
-source=("git+$url?rev=v0.1.3")
-sha256sums=('SKIP')
-depends=('coreutils')
+source=("${pkgname}-${pkgver}::${url}/archive/v${pkgver}.tar.gz")
+sha256sums=('c717ba88d946d719c6580a3580cd332a9853137d82a7d6bf4aa0bb79886bc6be')
 makedepends=('cargo')
 
 prepare() {
-    cd "$srcdir/$pkgname"
-    cargo fetch --locked --target "$CARCH-unknown-linux-gnu"
+    cd "${srcdir}/${pkgname}-${pkgver}"
+    cargo fetch --locked --target "${CARCH}-unknown-linux-gnu"
 }
 
 build() {
-    cd "$srcdir/$pkgname"
+    cd "${srcdir}/${pkgname}-${pkgver}"
     export RUSTUP_TOOLCHAIN=stable
     export CARGO_TARGET_DIR=target
         
@@ -32,6 +30,6 @@ build() {
 }
 
 package() {
-    cd "$srcdir/$pkgname"
+    cd "${srcdir}/${pkgname}-${pkgver}"
     cargo run --frozen --release -- -ivd "${pkgdir}/usr/bin"
 }
